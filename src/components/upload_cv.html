@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV Upload & Match 📤</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link href="./src/index.css" rel="stylesheet" />
+  <link rel= "stylesheet" href="/home/project/src/index.css">
+    
+    
+</head>
+
+<body>
+    <div class="flex items-center justify-center py-4 bg-[#EEEEEE] shadow-md">
+        <a href="/home/project/index.html" class="flex items-center text-[#222831] hover:text-[#00ADB5] transition-colors duration-200">
+            <span class="material-symbols-outlined mr-2">home</span>
+            Home
+        </a>
+    </div>
+    <div class="container mx-auto p-8 bg-[#EEEEEE] min-h-screen flex items-center justify-center">
+  <div class="w-full max-w-md bg-[#FFFFFF] shadow-2xl rounded-lg p-6">
+    <h1 class="text-2xl font-bold text-[#222831] mb-6 text-center">Upload CVs</h1>
+
+    <div class="mb-4">
+      <label for="cvFiles" class="block text-sm font-medium text-[#393E46] mb-2">Upload CVs (PDF or DOCX)</label>
+      <input type="file" id="cvFiles" name="cvFiles" multiple accept=".pdf,.docx" class="w-full px-3 py-2 border border-[#00ADB5] rounded-md focus:outline-none focus:ring-2 focus:ring-[#00ADB5]" />
+    </div>
+
+    <button id="parseMatchButton" class="w-full bg-[#00ADB5] hover:bg-[#393E46] text-white font-bold py-2 px-4 rounded-md transition duration-300">Parse and Match</button>
+
+    <div id="results" class="mt-6">
+      <h2 class="text-lg font-semibold text-[#222831] mb-2">Parsed Information and Match Score</h2>
+      <div id="parsedInfo" class="bg-[#F0F0F0] p-4 rounded-md shadow-md">
+        <!-- Parsed information will be displayed here -->
+        <p class="text-[#393E46] italic">No CVs uploaded yet.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    document.getElementById('parseMatchButton').addEventListener('click', async () => {
+const files = document.getElementById('cvFiles').files;
+const resultsDiv = document.getElementById('parsedInfo');
+resultsDiv.innerHTML = '<p class="text-[#393E46] italic">Parsing and matching...</p>';
+
+if (files.length === 0) {
+resultsDiv.innerHTML = '<p class="text-red-500">Please upload one or more CVs.</p>';
+return;
+}
+
+const formData = new FormData();
+for (let i = 0; i < files.length; i++) {
+formData.append('cvFiles', files[i]);
+}
+
+try {
+const response = await fetch('/parse_match_cv', {
+  method: 'POST',
+  body: formData,
+});
+
+if (!response.ok) {
+  throw new Error(`HTTP error! status: ${response.status}`);
+}
+
+const data = await response.json();
+
+let html = '';
+if (Array.isArray(data)) {
+  data.forEach(result => {
+    html += `<div class="mb-4 border border-[#00ADB5] rounded-md p-4">
+                <h3 class="font-semibold text-[#222831] mb-2">File: ${result.filename}</h3>
+                <p class="text-[#393E46]">Match Score: ${result.matchScore}</p>
+                <pre class="bg-[#F0F0F0] p-2 rounded-md overflow-x-auto text-sm">${JSON.stringify(result.parsedInfo, null, 2)}</pre>
+              </div>`;
+  });
+} else {
+  html = `<p class="text-red-500">Error: ${data.message || 'An unexpected error occurred.'}</p>`;
+}
+
+resultsDiv.innerHTML = html;
+} catch (error) {
+console.error('Fetch error:', error);
+resultsDiv.innerHTML = `<p class="text-red-500">Error: ${error.message || 'Failed to process CVs.'}</p>`;
+}
+});
+
+ </script>
+  <script src="./src/components/upload_cv.js"></script>
+
+ 
+</body>
+ 
+ 
+     
+</html>

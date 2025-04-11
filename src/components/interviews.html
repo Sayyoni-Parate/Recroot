@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Interview Creator 📧</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    
+    
+</head>
+
+<body>
+    <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Interview Creator 💌</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="flex items-center justify-center py-4 bg-[#EEEEEE] shadow-md">
+        <a href="/home/project/index.html" class="flex items-center text-[#222831] hover:text-[#00ADB5] transition-colors duration-200">
+            <span class="material-symbols-outlined mr-2">home</span>
+            Home
+        </a>
+    </div>
+
+   <div class="flex items-center justify-center py-2">
+        <button id="startVideoCallBtn" class="bg-[#00ADB5] hover:bg-[#393E46] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors duration-200 hidden">
+            <span class="material-symbols-outlined align-middle">video_call</span>
+            <span class="ml-2">Start Video Call</span>
+        </button>
+    </div>
+    <div id="passcodeModal" class="fixed z-10 inset-0 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true"> </span>
+            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">Enter Passcode</h3>
+                        <div class="mt-2">
+                            <input type="password" id="passcodeInput" class="shadow-sm focus:ring-[#00ADB5] focus:border-[#00ADB5] mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="Enter Passcode">
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button id="joinCallBtn" type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-[#00ADB5] text-base font-medium text-white hover:bg-[#393E46] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#00ADB5] sm:ml-3 sm:w-auto sm:text-sm">Join Call</button>
+                    <button id="cancelPasscodeBtn" type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-200 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="videoCallContainer" class="fixed z-20 inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white p-8 rounded-lg">
+            <div class="flex space-x-4 mb-4">
+                <div id="localVideoFeed" class="w-96 h-54 bg-gray-200"></div>
+                <div id="remoteVideoFeed" class="w-96 h-54 bg-gray-200"></div>
+            </div>
+            <div class="flex justify-center space-x-4">
+                <button id="toggleMicBtn" class="bg-[#00ADB5] hover:bg-[#393E46] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors duration-200">
+                    <span class="material-symbols-outlined align-middle" id="micIcon">mic</span>
+                </button>
+                <button id="toggleVideoBtn" class="bg-[#00ADB5] hover:bg-[#393E46] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors duration-200">
+                    <span class="material-symbols-outlined align-middle" id="videoIcon">videocam</span>
+                </button>
+                <button id="endCallBtn" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors duration-200">
+                    <span class="material-symbols-outlined align-middle">call_end</span>
+                </button>
+                <button id="chatBtn" class="bg-[#00ADB5] hover:bg-[#393E46] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors duration-200">
+                    <span class="material-symbols-outlined align-middle">chat</span>
+                </button>
+            </div>
+            <div id="chatContainer" class="mt-4 hidden">
+                <div id="chatMessages" class="h-32 overflow-y-scroll border border-gray-300 rounded-md p-2 mb-2"></div>
+                <div class="flex">
+                    <input type="text" id="chatInput" class="shadow-sm focus:ring-[#00ADB5] focus:border-[#00ADB5] mt-1 block w-full sm:text-sm border border-gray-300 rounded-md mr-2" placeholder="Type a message...">
+                    <button id="sendChatBtn" class="bg-[#00ADB5] hover:bg-[#393E46] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors duration-200">
+                        Send
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  
+    <div class="container mx-auto p-4 bg-[#EEEEEE] rounded-lg shadow-md">
+        <h1 class="text-2xl font-bold mb-4 text-[#222831]">Interview Email Generator</h1>
+
+        <div class="mb-4">
+            <label for="candidateSelect" class="block text-sm font-medium text-[#393E46]">Select Candidate:</label>
+            <select id="candidateSelect" class="mt-1 block w-full py-2 px-3 border border-[#393E46] bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#00ADB5] focus:border-[#00ADB5] sm:text-sm">
+                <option value="">Choose a candidate</option>
+                <option value="charlie_brown">Charlie Brown</option>
+                <option value="eve_williams">Eve Williams</option>
+                <option value="grave_davis">Grace Davis</option>
+              <option value="ivy_taylor">Ivy Taylor</option>
+              <option value="alice_smith">Alice Smith</option>
+              
+            </select>
+        </div>
+
+        <div id="dateTimeSlots" class="mb-4" style="display: none;">
+            <label class="block text-sm font-medium text-[#393E46]">Suggested Interview Slots:</label>
+            <div class="mt-2 space-y-2">
+                <div class="flex items-center">
+                    <input type="radio" id="slot1" name="interviewSlot" value="2024-07-26T10:00:00" class="h-4 w-4 text-[#00ADB5] focus:ring-[#00ADB5] border-gray-300">
+                    <label for="slot1" class="ml-2 text-sm text-[#393E46]">July 26, 2024, 10:00 AM</label>
+                </div>
+                <div class="flex items-center">
+                    <input type="radio" id="slot2" name="interviewSlot" value="2024-07-27T14:00:00" class="h-4 w-4 text-[#00ADB5] focus:ring-[#00ADB5] border-gray-300">
+                    <label for="slot2" class="ml-2 text-sm text-[#393E46]">July 27, 2024, 2:00 PM</label>
+                </div>
+                <div class="flex items-center">
+                    <input type="radio" id="slot3" name="interviewSlot" value="2024-07-29T11:00:00" class="h-4 w-4 text-[#00ADB5] focus:ring-[#00ADB5] border-gray-300">
+                    <label for="slot3" class="ml-2 text-sm text-[#393E46]">July 29, 2024, 11:00 AM</label>
+                </div>
+            </div>
+        </div>
+
+        <button id="generateEmailBtn" class="bg-[#00ADB5] hover:bg-[#393E46] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors duration-200">
+            Generate Email
+        </button>
+
+        <div id="emailPreview" class="mt-4 p-4 border border-[#393E46] rounded-md bg-white shadow-sm">
+            <h2 class="text-lg font-semibold mb-2 text-[#222831]">Email Preview:</h2>
+            <p id="emailContent" class="text-sm text-[#393E46]">Select a candidate and a time slot to generate the email.</p>
+            <span id="editEmailIcon" class="material-symbols-outlined cursor-pointer text-[#00ADB5] hover:text-[#393E46] hidden" title="Edit Email">edit</span>
+        </div>
+        <div class="mt-4 flex justify-center">
+            <a id="sendEmailLink" href="#" class="bg-[#00ADB5] hover:bg-[#393E46] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors duration-200 hidden">
+                <span class="material-symbols-outlined align-middle">mail</span>
+                <span class="ml-2">Send via Gmail</span>
+            </a>
+        </div>
+        <div id="editEmailModal" class="fixed z-10 inset-0 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+            <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+                <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true"> </span>
+                <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                        <div class="">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">Edit Email</h3>
+                            <div class="mt-2">
+                                <textarea id="emailEditTextarea" rows="10" class="shadow-sm focus:ring-[#00ADB5] focus:border-[#00ADB5] mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                        <button id="saveEmailBtn" type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-[#00ADB5] text-base font-medium text-white hover:bg-[#393E46] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#00ADB5] sm:ml-3 sm:w-auto sm:text-sm">Save</button>
+                        <button id="cancelEditBtn" type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-200 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const candidateSelect = document.getElementById('candidateSelect');
+            const generateEmailBtn = document.getElementById('generateEmailBtn');
+            const emailPreview = document.getElementById('emailPreview');
+            const emailContent = document.getElementById('emailContent');
+            const dateTimeSlots = document.getElementById('dateTimeSlots');
+            const sendEmailLink = document.getElementById('sendEmailLink');
+            const editEmailIcon = document.getElementById('editEmailIcon');
+            const editEmailModal = document.getElementById('editEmailModal');
+            const emailEditTextarea = document.getElementById('emailEditTextarea');
+            const saveEmailBtn = document.getElementById('saveEmailBtn');
+            const cancelEditBtn = document.getElementById('cancelEditBtn');
+            const startVideoCallBtn = document.getElementById('startVideoCallBtn');
+            const passcodeModal = document.getElementById('passcodeModal');
+            const passcodeInput = document.getElementById('passcodeInput');
+            const joinCallBtn = document.getElementById('joinCallBtn');
+            const cancelPasscodeBtn = document.getElementById('cancelPasscodeBtn');
+            const videoCallContainer = document.getElementById('videoCallContainer');
+            const localVideoFeed = document.getElementById('localVideoFeed');
+            const remoteVideoFeed = document.getElementById('remoteVideoFeed');
+            const toggleMicBtn = document.getElementById('toggleMicBtn');
+            const micIcon = document.getElementById('micIcon');
+            const toggleVideoBtn = document.getElementById('toggleVideoBtn');
+            const videoIcon = document.getElementById('videoIcon');
+            const endCallBtn = document.getElementById('endCallBtn');
+            const chatBtn = document.getElementById('chatBtn');
+            const chatContainer = document.getElementById('chatContainer');
+            const chatMessages = document.getElementById('chatMessages');
+            const chatInput = document.getElementById('chatInput');
+            const sendChatBtn = document.getElementById('sendChatBtn');
+
+            let isMicMuted = false;
+            let isVideoOff = false;
+            let localStream;
+            let peerConnection;
+
+            // Initially hide the date/time slots
+            dateTimeSlots.style.display = 'none';
+
+            candidateSelect.addEventListener('change', () => {
+                if (candidateSelect.value !== '') {
+                    dateTimeSlots.style.display = 'block'; // Show the date/time slots
+                    startVideoCallBtn.classList.remove('hidden'); // Show the start video call button
+                }
+                else {
+                    dateTimeSlots.style.display = 'none'; // Hide the date/time slots
+                    emailContent.textContent = 'Select a candidate and a time slot to generate the email.';
+                    sendEmailLink.classList.add('hidden'); // Hide the send email link
+                    editEmailIcon.classList.add('hidden'); // Hide the edit icon
+                    startVideoCallBtn.classList.add('hidden'); // Hide the start video call button
+                }
+            });
+
+            generateEmailBtn.addEventListener('click', () => {
+                const candidate = candidateSelect.value;
+                const selectedSlot = document.querySelector('input[name="interviewSlot"]:checked');
+
+                if (!candidate || !selectedSlot) {
+                    emailContent.textContent = 'Please select a candidate and a time slot.';
+                    sendEmailLink.classList.add('hidden'); // Hide the send email link
+                    editEmailIcon.classList.add('hidden'); // Hide the edit icon
+                    return;
+                }
+
+                const slotValue = selectedSlot.value;
+                const slotDate = new Date(slotValue);
+                const formattedDate = slotDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                const formattedTime = slotDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+
+                let candidateName = candidate.replace('_', ' ');
+                candidateName = candidateName.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+                const emailBody = `Dear ${candidateName},
+
+Thank you for your interest in the position at [Company Name]. We are excited to invite you for an interview for the [Job Title] position.
+
+We have scheduled an interview for you on ${formattedDate} at ${formattedTime}. The interview will be conducted via [Interview Platform, e.g., Google Meet, Zoom]. The meeting details will be sent to you separately.
+
+If this time does not work for you, please let us know as soon as possible so we can find an alternative.
+
+We look forward to speaking with you.
+
+Best regards,
+[HR Name]
+[Company Name] HR Team`;
+
+                emailContent.textContent = emailBody;
+
+                const subject = 'Interview Invitation - [Job Title] at [Company Name]';
+                const mailtoLink = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailBody)}`;
+                sendEmailLink.href = mailtoLink;
+                sendEmailLink.classList.remove('hidden');
+                editEmailIcon.classList.remove('hidden');
+            });
+
+            editEmailIcon.addEventListener('click', () => {
+                emailEditTextarea.value = emailContent.textContent;
+                editEmailModal.classList.remove('hidden');
+            });
+
+            saveEmailBtn.addEventListener('click', () => {
+                emailContent.textContent = emailEditTextarea.value;
+                editEmailModal.classList.add('hidden');
+                const subject = 'Interview Invitation - [Job Title] at [Company Name]';
+                const mailtoLink = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailContent.textContent)}`;
+                sendEmailLink.href = mailtoLink;
+            });
+
+            cancelEditBtn.addEventListener('click', () => {
+                editEmailModal.classList.add('hidden');
+            });
+
+            startVideoCallBtn.addEventListener('click', () => {
+                passcodeModal.classList.remove('hidden');
+            });
+
+            joinCallBtn.addEventListener('click', () => {
+                const passcode = passcodeInput.value;
+                // In a real application, you would validate the passcode here.
+                if (passcode === '1234') {
+                    passcodeModal.classList.add('hidden');
+                    startVideo();
+                } else {
+                    alert('Incorrect passcode. Please try again.');
+                }
+            });
+
+            cancelPasscodeBtn.addEventListener('click', () => {
+                passcodeModal.classList.add('hidden');
+            });
+
+            async function startVideo() {
+                try {
+                    localStream = await navigator.mediaDevices.getUserMedia({
+                        video: true,
+                        audio: true
+                    });
+                    localVideoFeed.innerHTML = ''; // Clear existing content
+                    const video = document.createElement('video');
+                    video.srcObject = localStream;
+                    video.autoplay = true;
+                    video.playsInline = true;
+                    localVideoFeed.appendChild(video);
+                    videoCallContainer.classList.remove('hidden');
+                    // Initialize peer connection (replace with your signaling server logic)
+                    //initiatePeerConnection();
+                } catch (error) {
+                    console.error('Error accessing media devices:', error);
+                    alert('Could not access your camera and microphone.');
+                }
+            }
+
+            // function initiatePeerConnection() {
+            //     peerConnection = new RTCPeerConnection({
+            //         iceServers: [
+            //             { urls: 'stun:stun.l.google.com:19302' }
+            //         ]
+            //     });
+
+            //     localStream.getTracks().forEach(track => {
+            //         peerConnection.addTrack(track, localStream);
+            //     });
+
+            //     peerConnection.ontrack = event => {
+            //         remoteVideoFeed.innerHTML = '';
+            //         const video = document.createElement('video');
+            //         video.srcObject = event.streams[0];
+            //         video.autoplay = true;
+            //         video.playsInline = true;
+            //         remoteVideoFeed.appendChild(video);
+            //     };
+
+            //     peerConnection.onicecandidate = event => {
+            //         if (event.candidate) {
+            //             // Send event.candidate to the other peer (signaling server)
+            //             console.log('ICE candidate:', event.candidate);
+            //         }
+            //     };
+
+            //     // Example: Create an offer
+            //     peerConnection.createOffer()
+            //         .then(offer => peerConnection.setLocalDescription(offer))
+            //         .then(() => {
+            //             // Send offer to the other peer (signaling server)
+            //             console.log('Offer created:', peerConnection.localDescription);
+            //         })
+            //         .catch(error => console.error('Error creating offer:', error));
+            // }
+
+            toggleMicBtn.addEventListener('click', () => {
+                if (localStream) {
+                    isMicMuted = !isMicMuted;
+                    localStream.getAudioTracks().forEach(track => track.enabled = !isMicMuted);
+                    micIcon.textContent = isMicMuted ? 'mic_off' : 'mic';
+                }
+            });
+
+            toggleVideoBtn.addEventListener('click', () => {
+                if (localStream) {
+                    isVideoOff = !isVideoOff;
+                    localStream.getVideoTracks().forEach(track => track.enabled = !isVideoOff);
+                    videoIcon.textContent = isVideoOff ? 'videocam_off' : 'videocam';
+                }
+            });
+
+            endCallBtn.addEventListener('click', () => {
+                if (localStream) {
+                    localStream.getTracks().forEach(track => track.stop());
+                    localVideoFeed.innerHTML = '';
+                    remoteVideoFeed.innerHTML = '';
+                    videoCallContainer.classList.add('hidden');
+                }
+                // if (peerConnection) {
+                //     peerConnection.close();
+                //     peerConnection = null;
+                // }
+            });
+
+            chatBtn.addEventListener('click', () => {
+                chatContainer.classList.toggle('hidden');
+            });
+
+            sendChatBtn.addEventListener('click', () => {
+                const message = chatInput.value;
+                if (message.trim() !== '') {
+                    const messageElement = document.createElement('p');
+                    messageElement.textContent = 'You: ' + message;
+                    chatMessages.appendChild(messageElement);
+                    chatInput.value = '';
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
+</body>
+ 
+ 
+</html>

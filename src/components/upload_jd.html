@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JD Analyzer & Upload 📝</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link rel= "stylesheet" href="/home/project/src/index.css">
+    
+    
+</head>
+
+<body>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JD Upload</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,0..200" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#6200EE',
+                        'primary-variant': '#3700B3',
+                        'secondary': '#03DAC5',
+                        'background': '#FFFFFF',
+                        'surface': '#FFFFFF',
+                        'error': '#B00020',
+                        'on-primary': '#FFFFFF',
+                        'on-secondary': '#000000',
+                        'on-background': '#000000',
+                        'on-surface': '#000000',
+                        'on-error': '#FFFFFF'
+                    },
+                    boxShadow: {
+                        'md': '0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12)'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background font-roboto">
+
+  <div class="flex items-center justify-center py-4 bg-[#EEEEEE] shadow-md">
+        <a href="/home/project/index.html" class="flex items-center text-[#222831] hover:text-[#00ADB5] transition-colors duration-200">
+            <span class="material-symbols-outlined mr-2">home</span>
+            Home
+        </a>
+    </div>
+    <div class="container mx-auto p-8">
+        <h1 class="text-2xl font-bold mb-4">JD Upload</h1>
+        <div class="shadow-md rounded-md p-4 bg-surface">
+            <textarea id="jdTextarea" rows="10" class="w-full p-2 border border-gray-300 rounded-md mb-4" placeholder="Paste Job Description here..."></textarea>
+            <input type="file" id="jdFile" accept=".txt" class="mb-4">
+            <button id="submitButton" class="bg-primary text-on-primary py-2 px-4 rounded-md hover:bg-primary-variant transition-colors shadow-md">Submit</button>
+        </div>
+        <div id="summaryContainer" class="mt-8 hidden">
+            <h2 class="text-xl font-semibold mb-2">Extracted Information:</h2>
+            <div id="skills" class="mb-2">
+                <h3 class="font-medium">Skills:</h3>
+                <ul id="skillsList" class="list-disc pl-5"></ul>
+            </div>
+            <div id="experience" class="mb-2">
+                <h3 class="font-medium">Experience:</h3>
+                <p id="experienceText"></p>
+            </div>
+            <div id="qualifications" class="mb-2">
+                <h3 class="font-medium">Qualifications:</h3>
+                <ul id="qualificationsList" class="list-disc pl-5"></ul>
+            </div>
+            <div id="responsibilities" class="mb-2">
+                <h3 class="font-medium">Responsibilities:</h3>
+                <ul id="responsibilitiesList" class="list-disc pl-5"></ul>
+            </div>
+        </div>
+    </div>
+    <script>
+        const jdTextarea = document.getElementById('jdTextarea');
+        const jdFile = document.getElementById('jdFile');
+        const submitButton = document.getElementById('submitButton');
+        const summaryContainer = document.getElementById('summaryContainer');
+        const skillsList = document.getElementById('skillsList');
+        const experienceText = document.getElementById('experienceText');
+        const qualificationsList = document.getElementById('qualificationsList');
+        const responsibilitiesList = document.getElementById('responsibilitiesList');
+
+        function displaySummary(data) {
+            skillsList.innerHTML = '';
+            data.skills.forEach(skill => {
+                const li = document.createElement('li');
+                li.textContent = skill;
+                skillsList.appendChild(li);
+            });
+
+            experienceText.textContent = data.experience;
+
+            qualificationsList.innerHTML = '';
+            data.qualifications.forEach(qualification => {
+                const li = document.createElement('li');
+                li.textContent = qualification;
+                qualificationsList.appendChild(li);
+            });
+
+            responsibilitiesList.innerHTML = '';
+            data.responsibilities.forEach(responsibility => {
+                const li = document.createElement('li');
+                li.textContent = responsibility;
+                responsibilitiesList.appendChild(li);
+            });
+
+            summaryContainer.classList.remove('hidden');
+        }
+
+        async function summarizeJD(jdText) {
+            try {
+                const response = await fetch('/summarize_jd', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ jd: jdText })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                displaySummary(data);
+            } catch (error) {
+                console.error('Error summarizing JD:', error);
+                alert('Error summarizing JD. Please check the console for details.');
+            }
+        }
+
+        submitButton.addEventListener('click', async () => {
+            let jdText = jdTextarea.value;
+
+            if (jdFile.files.length > 0) {
+                const file = jdFile.files[0];
+                const reader = new FileReader();
+                reader.onload = async (e) => {
+                    jdText = e.target.result;
+                    await summarizeJD(jdText);
+                };
+                reader.readAsText(file);
+            } else if (jdText.trim() !== '') {
+                await summarizeJD(jdText);
+            } else {
+                alert('Please paste a job description or upload a .txt file.');
+            }
+        });
+    </script>
+    
+
+</body>
+</html>

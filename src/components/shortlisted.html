@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candidate Table View 🧑‍💼</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <link rel= "stylesheet" href="/home/project/src/index.css">
+    
+    
+</head>
+
+<body>
+    <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candidate Table View 🧑‍💼</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    
+    <style>
+  /* Optional: Add some basic styling for the table */
+  body {
+    font-family: sans-serif;
+    background-color: #EEEEEE;
+  }
+</style>
+</head>
+
+<body>
+
+  <div class="flex items-center justify-center py-4 bg-[#EEEEEE] shadow-md">
+        <a href="/home/project/index.html" class="flex items-center text-[#222831] hover:text-[#00ADB5] transition-colors duration-200">
+            <span class="material-symbols-outlined mr-2">home</span>
+            Home
+        </a>
+    </div>
+    <div class="container mx-auto p-4">
+  <h1 class="text-2xl font-bold mb-4">Candidate List</h1>
+
+  <div class="mb-4">
+    <label for="shortlistedFilter" class="mr-2">Show Shortlisted:</label>
+    <input type="checkbox" id="shortlistedFilter" onchange="filterShortlisted()">
+  </div>
+
+  <div class="overflow-x-auto">
+    <table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
+      <thead class="bg-[#00ADB5] text-white">
+        <tr>
+          <th class="py-2 px-4 text-left">Name</th>
+          <th class="py-2 px-4 text-left">Email</th>
+          <th class="py-2 px-4 text-left">Match Score</th>
+          <th class="py-2 px-4 text-left">Shortlisted</th>
+        </tr>
+      </thead>
+      <tbody id="candidateTableBody">
+        <!-- Table rows will be dynamically added here -->
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+ <script>
+  // Demo data (replace with API call)
+  const demoData = [
+    {
+      name: "Alice Smith",
+      email: "alice.smith@example.com",
+      matchScore: 85,
+      shortlisted: true,
+    },
+    {
+      name: "Bob Johnson",
+      email: "bob.johnson@example.com",
+      matchScore: 60,
+      shortlisted: false,
+    },
+    {
+      name: "Charlie Brown",
+      email: "charlie.brown@example.com",
+      matchScore: 92,
+      shortlisted: true,
+    },
+    {
+      name: "David Lee",
+      email: "david.lee@example.com",
+      matchScore: 70,
+      shortlisted: false,
+    },
+    {
+      name: "Eve Williams",
+      email: "eve.williams@example.com",
+      matchScore: 78,
+      shortlisted: true,
+    },
+    {
+      name: "Frank Miller",
+      email: "frank.miller@example.com",
+      matchScore: 55,
+      shortlisted: false,
+    },
+    {
+      name: "Grace Davis",
+      email: "grace.davis@example.com",
+      matchScore: 88,
+      shortlisted: true,
+    },
+    {
+      name: "Henry Wilson",
+      email: "henry.wilson@example.com",
+      matchScore: 65,
+      shortlisted: false,
+    },
+    {
+      name: "Ivy Taylor",
+      email: "ivy.taylor@example.com",
+      matchScore: 95,
+      shortlisted: true,
+    },
+    {
+      name: "Jack Anderson",
+      email: "jack.anderson@example.com",
+      matchScore: 72,
+      shortlisted: false,
+    }
+  ];
+
+  const candidateTableBody = document.getElementById("candidateTableBody");
+  let candidates = [...demoData]; // Initialize with demo data
+
+  function renderCandidates(candidatesToRender) {
+    candidateTableBody.innerHTML = ""; // Clear existing rows
+
+    candidatesToRender.forEach((candidate) => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td class="py-2 px-4 border-b">${candidate.name}</td>
+        <td class="py-2 px-4 border-b">${candidate.email}</td>
+        <td class="py-2 px-4 border-b">${candidate.matchScore}</td>
+        <td class="py-2 px-4 border-b">${candidate.shortlisted ? "Yes" : "No"}</td>
+      `;
+      candidateTableBody.appendChild(row);
+    });
+  }
+
+  function filterShortlisted() {
+    const showShortlisted = document.getElementById("shortlistedFilter").checked;
+    let filteredCandidates = candidates;
+
+    if (showShortlisted) {
+      filteredCandidates = candidates.filter((candidate) => candidate.shortlisted);
+    }
+
+    renderCandidates(filteredCandidates);
+  }
+
+  // Initial render
+  renderCandidates(candidates);
+</script>
+</body>
+ 
+ 
+</html>
+</body>
+ 
+ 
+</html>
